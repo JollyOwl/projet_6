@@ -83,6 +83,7 @@ summary,
 time,
 mark,
 audio,
+a,
 video {
   margin: 0;
   padding: 0;
@@ -231,11 +232,11 @@ li:hover {
   font-weight: 700;
   color: #1d6154;
   border-color: #1d6154;
+
   background-color: transparent;
   padding: 8px 16px;
   text-align: center;
   border-radius: 60px;
-  border-width: 1.75px;
 }
 
 #contact {
@@ -267,6 +268,15 @@ li:hover {
 #contact textarea {
   border: none;
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+#contact a {
+  color: black;
+  text-align: center;
+}
+
+.linkWrapper {
+  text-align: center;
 }
 
 input[type="submit"] {
