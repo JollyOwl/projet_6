@@ -1,13 +1,22 @@
-// Start when DOM is loaded
 document.addEventListener("DOMContentLoaded", async () => {
   const worksData = await fetchWorks();
   const categories = await fetchCategories();
   if (categories) {
     createFilters(categories, worksData);
   }
+
+  // Check if the user is logged in by looking for a token in sessionStorage
+  const isLoggedIn = sessionStorage.getItem("isLoggedIn");
+  if (isLoggedIn) {
+    console.log("User is logged in");
+    // Change the background color of the modify button
+    const modifyButton = document.getElementById("modifyButton");
+    if (modifyButton) {
+      modifyButton.style.display = "block";
+    }
+  }
 });
 
-// Define the addWorks function
 function addWorks(worksData) {
   const figuresContainer = document.getElementById("gallery");
   figuresContainer.innerHTML = ""; // Clear existing works
@@ -24,7 +33,6 @@ function addWorks(worksData) {
   });
 }
 
-// Define the fetchWorks function
 async function fetchWorks() {
   try {
     const responseWorks = await fetch("http://localhost:5678/api/works");
@@ -43,7 +51,6 @@ async function fetchWorks() {
   }
 }
 
-// Fetch categories from API
 async function fetchCategories() {
   try {
     const responseCategories = await fetch(
@@ -63,7 +70,6 @@ async function fetchCategories() {
   }
 }
 
-// Create Filters in the DOM
 function createFilters(categoriesData, worksData) {
   if (!categoriesData) {
     console.error("No categories data provided to create filters.");
@@ -73,17 +79,15 @@ function createFilters(categoriesData, worksData) {
   const portfolioSection = document.getElementById("portfolio");
   const h2Portfolio = portfolioSection.querySelector("h2");
 
-  // Create a single filter container
   const filterContainer = document.createElement("div");
   filterContainer.className = "filterContainer";
   h2Portfolio.insertAdjacentElement("afterend", filterContainer);
 
-  // Create a 'Show All' filter
   const allFilter = document.createElement("button");
   allFilter.className = "filter";
   allFilter.textContent = "Tous";
   allFilter.addEventListener("click", () => {
-    addWorks(worksData); // Show all works
+    addWorks(worksData);
   });
   filterContainer.appendChild(allFilter);
 
@@ -95,8 +99,53 @@ function createFilters(categoriesData, worksData) {
       const filteredWorks = worksData.filter(
         (work) => work.categoryId === category.id
       );
-      addWorks(filteredWorks); // Show filtered works
+      addWorks(filteredWorks);
     });
     filterContainer.appendChild(filter);
   });
 }
+
+document
+  .getElementById("loginForm")
+  .addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    try {
+      const responseLogIn = await fetch(
+        "http://localhost:5678/api/users/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: email, password: password }),
+        }
+      );
+
+      if (responseLogIn.ok) {
+        const userData = await responseLogIn.json();
+        console.log("Login successful:", userData);
+
+        // Store the login state in sessionStorage
+        sessionStorage.setItem("isLoggedIn", true);
+
+        // Redirect to the main page
+        window.location.href =
+          "file:///Users/sarah-sophiethouabtia/Documents/Open%20Classroom/Projet-6/Portfolio-architecte-sophie-bluel/FrontEnd/index.html";
+      } else if (responseLogIn.status === 404) {
+        console.log("ID not found");
+        document.getElementById("errorMessage").textContent = "ID not found";
+      } else {
+        console.log("Other error", responseLogIn.status);
+        document.getElementById("errorMessage").textContent =
+          "Other error: " + responseLogIn.status;
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      document.getElementById("errorMessage").textContent =
+        "Network error: " + error.message;
+    }
+  });
