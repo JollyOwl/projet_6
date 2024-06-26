@@ -203,7 +203,6 @@ li:hover {
 }
 #portfolio h2 {
   text-align: center;
-  margin-bottom: 1em;
 }
 .gallery {
   width: 100%;
@@ -296,6 +295,24 @@ footer nav ul {
   margin: 2em;
 }
 
+.wrapper_header {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+
 #modifyButton {
   display: none;
+  background-color: transparent;
+  border: none;
+  font-size: 1.125 rem;
+  padding-top: 8px;
+}
+
+.projets_wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }

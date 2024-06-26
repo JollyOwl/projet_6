@@ -77,11 +77,11 @@ function createFilters(categoriesData, worksData) {
   }
 
   const portfolioSection = document.getElementById("portfolio");
-  const h2Portfolio = portfolioSection.querySelector("h2");
+  const projets_wrapper = document.getElementById("projets_wrapper");
 
   const filterContainer = document.createElement("div");
   filterContainer.className = "filterContainer";
-  h2Portfolio.insertAdjacentElement("afterend", filterContainer);
+  projets_wrapper.insertAdjacentElement("beforeend", filterContainer);
 
   const allFilter = document.createElement("button");
   allFilter.className = "filter";
